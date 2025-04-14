@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt Asymmetric</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #4A90E2;
+            border-color: #4A90E2;
+        }
+        .btn-primary:hover {
+            background-color: #357ABD;
+            border-color: #357ABD;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">PKI Application</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/encrypt-asymmetric">Encrypt Asymmetric</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/decrypt-asymmetric">Decrypt Asymmetric</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <h1 class="mb-4">Decrypt Asymmetric</h1>
+    <div class="card">
+        <div class="card-body">
+            <form action="/decrypt-asymmetric" method="post">
+                <div class="mb-3">
+                    <label for="encryptedData" class="form-label">Encrypted Data</label>
+                    <textarea class="form-control" id="encryptedData" name="encryptedData" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="privateKey" class="form-label">Private Key</label>
+                    <textarea class="form-control" id="privateKey" name="privateKey" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Decrypt Data</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Affichage des résultats -->
+    <div th:if="${decryptedData}" class="mt-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2>Decrypted Data</h2>
+            </div>
+            <div class="card-body">
+                <pre th:text="${decryptedData}" class="p-3 bg-light rounded"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

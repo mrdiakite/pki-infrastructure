@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Key Pair</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #4A90E2;
+            border-color: #4A90E2;
+        }
+        .btn-primary:hover {
+            background-color: #357ABD;
+            border-color: #357ABD;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">PKI Application</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/certificate/generate-certificate">Generate Certificate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/generate-keypair">Generate Key Pair</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-keypair">View Key Pair</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container">
+    <h1 class="mb-4">Generate Key Pair</h1>
+    <div class="card">
+        <div class="card-body">
+            <form action="/generate-keypair" method="post">
+                <div class="mb-3">
+                    <label for="keySize" class="form-label">Key Size</label>
+                    <select class="form-control" id="keySize" name="keySize" required>
+                        <option value="2048">2048 bits</option>
+                        <option value="4096">4096 bits</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Generate Key Pair</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

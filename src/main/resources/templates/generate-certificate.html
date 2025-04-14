@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générer un Certificat</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Couleurs personnalisées */
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #FF6F61;
+            --background-color: #F4F4F4;
+            --text-color: #333333;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color) !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: white;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        /* Animation pour la section d'accueil */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section {
+            animation: fadeIn 1s ease-out;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">PKI Application</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/certificate/generate-certificate">Generate Certificate</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/generate-keypair">Generate Key Pair</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/view-certificate">View Certificate</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="container mt-5">
+    <h1 class="mb-4">Générer un Certificat</h1>
+    <div class="card">
+        <div class="card-body">
+            <form action="/certificate/generate-certificate" method="post">
+                <!-- Nom Commun (CN) -->
+                <div class="mb-3">
+                    <label for="commonName" class="form-label">Nom Commun (CN)</label>
+                    <input type="text" class="form-control" id="commonName" name="commonName" placeholder="Exemple : TestUser" required>
+                </div>
+
+                <!-- Organisation (O) -->
+                <div class="mb-3">
+                    <label for="organization" class="form-label">Organisation (O)</label>
+                    <input type="text" class="form-control" id="organization" name="organization" placeholder="Exemple : Ma Société" required>
+                </div>
+
+                <!-- Unité Organisationnelle (OU) -->
+                <div class="mb-3">
+                    <label for="organizationalUnit" class="form-label">Unité Organisationnelle (OU)</label>
+                    <input type="text" class="form-control" id="organizationalUnit" name="organizationalUnit" placeholder="Exemple : IT Department">
+                </div>
+
+                <!-- Localité (L) -->
+                <div class="mb-3">
+                    <label for="locality" class="form-label">Localité (L)</label>
+                    <input type="text" class="form-control" id="locality" name="locality" placeholder="Exemple : Paris">
+                </div>
+
+                <!-- État ou Province (ST) -->
+                <div class="mb-3">
+                    <label for="state" class="form-label">État ou Province (ST)</label>
+                    <input type="text" class="form-control" id="state" name="state" placeholder="Exemple : Île-de-France">
+                </div>
+
+                <!-- Pays (C) -->
+                <div class="mb-3">
+                    <label for="country" class="form-label">Pays (C)</label>
+                    <input type="text" class="form-control" id="country" name="country" placeholder="Exemple : FR" maxlength="2" required>
+                </div>
+
+                <!-- Adresse Email -->
+                <div class="mb-3">
+                    <label for="email" class="form-label">Adresse Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Exemple : test@example.com">
+                </div>
+
+                <!-- Durée de Validité (en jours) -->
+                <div class="mb-3">
+                    <label for="validityDays" class="form-label">Durée de Validité (en jours)</label>
+                    <input type="number" class="form-control" id="validityDays" name="validityDays" placeholder="Exemple : 365" required>
+                </div>
+
+                <!-- Bouton de Soumission -->
+                <button type="submit" class="btn btn-primary">Generate Certificate</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Affichage des messages de succès ou d'erreur -->
+    <div th:if="${message}" class="alert alert-success mt-3" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-5">
+    <div class="container">
+        <p class="mb-0">&copy; 2025 PKI Application. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

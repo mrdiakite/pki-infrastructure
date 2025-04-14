@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PKI Manager Application</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Couleurs personnalisées */
+        :root {
+            --primary-color: #4A90E2;
+            --secondary-color: #FF6F61;
+            --background-color: #F4F4F4;
+            --text-color: #333333;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: var(--primary-color) !important;
+        }
+
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+        }
+
+        .bg-primary {
+            background-color: var(--primary-color) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .feature-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            background-color: white;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        /* Animation pour la section d'accueil */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-section {
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Animation pour les cartes */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-card {
+            animation: slideIn 0.5s ease-out;
+            animation-fill-mode: backwards;
+        }
+
+        /* Délai d'animation pour chaque carte */
+        .feature-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .feature-card:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .feature-card:nth-child(5) {
+            animation-delay: 1s;
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">PKI Application</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/certificate">Certificates</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/keypair">KeyPairs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/verify">Verify Signature</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/hash">Hashing</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="bg-primary text-white text-center py-5 hero-section">
+    <div class="container">
+        <h1 class="display-4">Welcome to PKI Manager Application</h1>
+        <p class="lead">A modern public key infrastructure for managing and distributing digital certificates.</p>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container my-5">
+    <div class="row">
+        <!-- Generate Certificate -->
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Generate Certificate</h5>
+                    <p class="card-text">Create and manage digital certificates for secure communication.</p>
+                    <a href="/certificate/generate-certificate" class="btn btn-primary">Generate Certificate</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Key Pair -->
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Generate Key Pair</h5>
+                    <p class="card-text">Generate public and private key pairs for encryption and signing.</p>
+                    <a href="/generate-keypair" class="btn btn-primary">Generate Key Pair</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Encrypt Symmetric -->
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Encrypt Symmetric</h5>
+                    <p class="card-text">Encrypt and decrypt data using symmetric encryption algorithms.</p>
+                    <a href="/encrypt-symmetric" class="btn btn-primary">Encrypt Symmetric</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Encrypt Asymmetric -->
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Encrypt Asymmetric</h5>
+                    <p class="card-text">Encrypt and decrypt data using asymmetric encryption algorithms.</p>
+                    <a href="/encrypt-asymmetric" class="btn btn-primary">Encrypt Asymmetric</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Data -->
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Sign Data</h5>
+                    <p class="card-text">Sign and verify data using digital signatures.</p>
+                    <a href="/sign" class="btn btn-primary">Sign Data</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Certificate in Ldap</h5>
+                    <p class="card-text">View Certificates storaged in LDAP.</p>
+                    <a href="/ldap" class="btn btn-primary">Certificate in Ldap</a>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <p class="mb-0">&copy; 2025 PKI Application. All rights reserved.</p>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
