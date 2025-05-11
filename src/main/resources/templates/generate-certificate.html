@@ -99,15 +99,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/certificate/generate-certificate">Generate Certificate</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/generate-keypair">Generate Key Pair</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/view-certificate">View Certificate</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -118,53 +109,53 @@
     <h1 class="mb-4">Générer un Certificat</h1>
     <div class="card">
         <div class="card-body">
-            <form action="/certificate/generate-certificate" method="post">
+            <form action="/certificate/generate-certificate" method="post" th:object="${certificate}">
                 <!-- Nom Commun (CN) -->
                 <div class="mb-3">
                     <label for="commonName" class="form-label">Nom Commun (CN)</label>
-                    <input type="text" class="form-control" id="commonName" name="commonName" placeholder="Exemple : TestUser" required>
+                    <input type="text" th:field="*{commonName}" class="form-control" id="commonName" name="commonName" placeholder="Exemple : TestUser" required>
                 </div>
 
                 <!-- Organisation (O) -->
                 <div class="mb-3">
                     <label for="organization" class="form-label">Organisation (O)</label>
-                    <input type="text" class="form-control" id="organization" name="organization" placeholder="Exemple : Ma Société" required>
+                    <input type="text" class="form-control" id="organization" th:field="*{organization}" name="organization" placeholder="Exemple : Ma Société" required>
                 </div>
 
                 <!-- Unité Organisationnelle (OU) -->
                 <div class="mb-3">
                     <label for="organizationalUnit" class="form-label">Unité Organisationnelle (OU)</label>
-                    <input type="text" class="form-control" id="organizationalUnit" name="organizationalUnit" placeholder="Exemple : IT Department">
+                    <input type="text" class="form-control" id="organizationalUnit" th:field="*{organizationalUnit}" name="organizationalUnit" placeholder="Exemple : IT Department">
                 </div>
 
                 <!-- Localité (L) -->
                 <div class="mb-3">
                     <label for="locality" class="form-label">Localité (L)</label>
-                    <input type="text" class="form-control" id="locality" name="locality" placeholder="Exemple : Paris">
+                    <input type="text" class="form-control" id="locality" th:field="*{locality}" name="locality" placeholder="Exemple : Paris">
                 </div>
 
                 <!-- État ou Province (ST) -->
                 <div class="mb-3">
                     <label for="state" class="form-label">État ou Province (ST)</label>
-                    <input type="text" class="form-control" id="state" name="state" placeholder="Exemple : Île-de-France">
+                    <input type="text" class="form-control" id="state" th:field="*{state}" name="state" placeholder="Exemple : Île-de-France">
                 </div>
 
                 <!-- Pays (C) -->
                 <div class="mb-3">
                     <label for="country" class="form-label">Pays (C)</label>
-                    <input type="text" class="form-control" id="country" name="country" placeholder="Exemple : FR" maxlength="2" required>
+                    <input type="text" class="form-control" id="country" th:field="*{country}" name="country" placeholder="Exemple : FR" maxlength="2" required>
                 </div>
 
                 <!-- Adresse Email -->
                 <div class="mb-3">
                     <label for="email" class="form-label">Adresse Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Exemple : test@example.com">
+                    <input type="email" class="form-control" id="email" th:field="*{email}" name="email" placeholder="Exemple : test@example.com">
                 </div>
 
                 <!-- Durée de Validité (en jours) -->
                 <div class="mb-3">
                     <label for="validityDays" class="form-label">Durée de Validité (en jours)</label>
-                    <input type="number" class="form-control" id="validityDays" name="validityDays" placeholder="Exemple : 365" required>
+                    <input type="number" class="form-control" id="validityDays" th:field="*{validityDays}" name="validityDays" placeholder="Exemple : 365" required>
                 </div>
 
                 <!-- Bouton de Soumission -->

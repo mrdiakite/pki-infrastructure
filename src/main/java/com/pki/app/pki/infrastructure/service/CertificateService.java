@@ -1,59 +1,95 @@
 package com.pki.app.pki.infrastructure.service;
 
-
 import com.pki.app.pki.infrastructure.model.Certificate;
-import com.pki.app.pki.infrastructure.repository.CertificateRepository;
+import com.pki.app.pki.infrastructure.model.LdapCertificate;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.cert.X509Certificate;
+import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class CertificateService {
 
     @Autowired
-    private CertificateRepository certificateRepository;
+    private LdapTemplate ldapTemplate;
 
-    /**
-     * Sauvegarde un certificat dans la base de données.
-     *
-     * @param certificateData Le contenu du certificat (en base64 ou texte).
-     * @return L'entité Certificate sauvegardée.
-     */
-    public Certificate saveCertificate(String certificateData) {
-        Certificate certificate = new Certificate();
-        certificate.setCertificateData(certificateData);
-        return certificateRepository.save(certificate);
+    public List<String> getAllCertificates() {
+        return ldapTemplate.search(
+                "ou=certificates",                      // DN de base
+                "(objectClass=inetOrgPerson)",          // Filtre LDAP
+                (AttributesMapper<String>) attrs -> {
+                    return (String) attrs.get("cn").get();  // Récupère le CN
+                }
+        );
     }
 
-    /**
-     * Récupère un certificat par son ID.
-     *
-     * @param id L'ID du certificat.
-     * @return L'entité Certificate correspondante.
-     */
-    public Certificate getCertificateById(Long id) {
-        return certificateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Certificate not found"));
+    public void generateAndStore(String commonName) throws Exception {
+        if (commonName == null || commonName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Common name is required.");
+        }
+
+        // Génère une paire de clés
+        KeyPair keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
+
+        // Génère le certificat auto-signé
+        X509Certificate cert = generateSelfSignedCert(commonName, keyPair);
+
+        // Sauvegarde dans LDAP
+        LdapCertificate ldapCert = new LdapCertificate();
+        ldapCert.setCommonName(commonName);
+        ldapCert.setCertificateData(cert.getEncoded());
+        ldapCert.setStatus("VALID");
+
+        ldapTemplate.create(ldapCert);
+
+
     }
 
-    /**
-     * Récupère un certificat par son contenu.
-     *
-     * @param certificateData Le contenu du certificat (en base64 ou texte).
-     * @return L'entité Certificate correspondante.
-     */
-    public Certificate getCertificateByData(String certificateData) {
-        return certificateRepository.findByCertificateData(certificateData)
-                .orElseThrow(() -> new RuntimeException("Certificate not found for the given data"));
+    public String getCertificateByCommonName(String cn) {
+        // Utilisez un filtre plus large avec des wildcards
+        return ldapTemplate.search(
+                "ou=certificates,dc=flash,dc=local",
+                "(cn=*" + cn + "*)",  // Recherche avec wildcards
+                (AttributesMapper<String>) attrs -> {
+                    byte[] certBytes = (byte[]) attrs.get("userCertificate;binary").get();
+                    return Base64.getEncoder().encodeToString(certBytes);
+                }
+        ).stream().findFirst().orElse(null);
     }
 
-    /**
-     * Récupère tous les certificats stockés dans la base de données.
-     *
-     * @return Une liste de tous les certificats.
-     */
-    public List<Certificate> getAllCertificates() {
-        return certificateRepository.findAll();
+    private X509Certificate generateSelfSignedCert(String commonName, KeyPair keyPair) throws Exception {
+        X500Name issuerName = new X500Name("CN=" + commonName);
+        X500Name subjectName = issuerName;
+        BigInteger serial = BigInteger.valueOf(System.currentTimeMillis());
+        Date startDate = new Date();
+        Date endDate = new Date(startDate.getTime() + 365L * 24 * 60 * 60 * 1000);
+
+        X509v3CertificateBuilder certBuilder = new X509v3CertificateBuilder(
+                issuerName,
+                serial,
+                startDate,
+                endDate,
+                subjectName,
+                SubjectPublicKeyInfo.getInstance(keyPair.getPublic().getEncoded())
+        );
+
+        return new JcaX509CertificateConverter()
+                .setProvider("BC")
+                .getCertificate(certBuilder.build(
+                        new JcaContentSignerBuilder("SHA256WithRSA").build(keyPair.getPrivate())
+                ));
     }
 }

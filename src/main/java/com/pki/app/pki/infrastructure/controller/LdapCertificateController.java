@@ -1,6 +1,8 @@
-package com.pki.app.pki.infrastructure.contoller;
+package com.pki.app.pki.infrastructure.controller;
 
 import com.pki.app.pki.infrastructure.dto.CertificateDTO;
+import com.pki.app.pki.infrastructure.dto.CertificateData;
+import com.pki.app.pki.infrastructure.model.LdapCertificate;
 import com.pki.app.pki.infrastructure.service.LdapCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,17 +13,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/certificate")
+@RequestMapping("/ldap")
 public class LdapCertificateController {
 
     @Autowired
     private LdapCertificateService ldapService;
 
-    @GetMapping("/view-certificates-from-ldap")
+    @GetMapping("/view")
     public String viewCertificatesFromLdap(Model model) {
         try {
             // Récupérer les certificats depuis OpenLDAP
-            List<CertificateDTO> certificates = ldapService.fetchCertificatesFromLdap();
+            List<CertificateData> certificates = ldapService.fetchCertificatesFromLdap();
 
             // Ajouter les certificats au modèle Thymeleaf
             model.addAttribute("certificates", certificates);

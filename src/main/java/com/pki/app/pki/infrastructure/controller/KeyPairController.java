@@ -1,9 +1,9 @@
-package com.pki.app.pki.infrastructure.contoller;
+package com.pki.app.pki.infrastructure.controller;
 
+import com.pki.app.pki.infrastructure.model.LdapCertificate;
 import com.pki.app.pki.infrastructure.service.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.AttributesMapper;
-import org.springframework.ldap.core.ContextMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.KeyPair;
 import java.util.Base64;
+import java.util.List;
 
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
@@ -29,6 +30,11 @@ public class KeyPairController {
 
     @Autowired
     private LdapTemplate ldapTemplate;
+
+    @GetMapping("/keypair")
+    public String keyPairHome(Model model) {
+        return "keypairs"; // Retourne le template keypairs.html
+    }
 
     /**
      * Affiche le formulaire pour générer une paire de clés.
@@ -103,6 +109,6 @@ public class KeyPairController {
             model.addAttribute("error", "Erreur lors de la récupération de la paire de clés : " + e.getMessage());
         }
 
-        return "view-keypair";
+        return "keypairs";
     }
 }

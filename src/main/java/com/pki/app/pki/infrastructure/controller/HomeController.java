@@ -1,4 +1,4 @@
-package com.pki.app.pki.infrastructure.contoller;
+package com.pki.app.pki.infrastructure.controller;
 
 
 import org.springframework.stereotype.Controller;

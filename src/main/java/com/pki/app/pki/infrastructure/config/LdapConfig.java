@@ -11,7 +11,7 @@ public class LdapConfig {
     @Bean
     public LdapContextSource contextSource() {
         LdapContextSource contextSource = new LdapContextSource();
-        contextSource.setUrl("ldap://192.168.1.7:389");
+        contextSource.setUrl("ldap://192.168.1.10:389");
         contextSource.setBase("dc=flash,dc=local");
         contextSource.setUserDn("cn=admin,dc=flash,dc=local");
         contextSource.setPassword("flash");

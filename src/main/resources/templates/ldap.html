@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificates from OpenLDAP</title>
+    <title>Certificates Details</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
@@ -23,9 +23,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/certificate/generate-certificate">Generate Certificate</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/certificate/view-certificates-from-ldap">View Certificates from LDAP</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -33,7 +30,7 @@
 
 <!-- Main Content -->
 <div class="container mt-5">
-    <h1 class="mb-4">Certificates Stored in OpenLDAP</h1>
+    <h1 class="mb-4">Certificate Details</h1>
 
     <!-- Affichage des messages de succès ou d'erreur -->
     <div th:if="${message}" class="alert alert-success mt-3" th:text="${message}"></div>
@@ -44,8 +41,8 @@
         <table class="table table-bordered table-striped">
             <thead class="table-dark">
             <tr>
+                <th>Common Name</th>
                 <th>Serial Number</th>
-                <th>Subject</th>
                 <th>Issuer</th>
                 <th>Valid From</th>
                 <th>Valid To</th>
@@ -56,11 +53,11 @@
             <tbody>
             <!-- Itération sur la liste des certificats -->
             <tr th:each="certificate : ${certificates}">
+                <td th:text="${#strings.substringAfter(certificate.subject, 'CN=')}">Common Name</td>
                 <td th:text="${certificate.serialNumber}">Serial Number</td>
-                <td th:text="${certificate.subject}">Subject</td>
                 <td th:text="${certificate.issuer}">Issuer</td>
-                <td th:text="${#temporals.format(certificate.validFrom, 'yyyy-MM-dd HH:mm:ss')}">Valid From</td>
-                <td th:text="${#temporals.format(certificate.validTo, 'yyyy-MM-dd HH:mm:ss')}">Valid To</td>
+                <td th:text="${#dates.format(certificate.validFrom, 'yyyy-MM-dd HH:mm:ss')}">Valid From</td>
+                <td th:text="${#dates.format(certificate.validTo, 'yyyy-MM-dd HH:mm:ss')}">Valid To</td>
                 <td th:text="${certificate.status}">Status</td>
                 <td>
                     <a th:href="@{/certificate/revoke/{id}(id=${certificate.id})}" class="btn btn-danger btn-sm">Revoke</a>

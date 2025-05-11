@@ -42,13 +42,7 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/certificate/generate-certificate">Generate Certificate</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/generate-keypair">Generate Key Pair</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/view-keypair">View Key Pair</a>
+                    <a class="nav-link" href="/keypairs">keypairs</a>
                 </li>
             </ul>
         </div>
@@ -56,23 +50,23 @@
 </nav>
 
 <!-- Main Content -->
-<div class="container">
-    <h1 class="mb-4">Generate Key Pair</h1>
-    <div class="card">
-        <div class="card-body">
-            <form action="/generate-keypair" method="post">
-                <div class="mb-3">
-                    <label for="keySize" class="form-label">Key Size</label>
-                    <select class="form-control" id="keySize" name="keySize" required>
-                        <option value="2048">2048 bits</option>
-                        <option value="4096">4096 bits</option>
-                    </select>
-                </div>
+<div class="container mt-5">
+    <h1>Generate Key Pair</h1>
 
-                <button type="submit" class="btn btn-primary">Generate Key Pair</button>
-            </form>
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+    <form th:action="@{/generate-keypair}" method="post">
+        <div class="mb-3">
+            <label for="keySize" class="form-label">Key Size</label>
+            <select class="form-select" id="keySize" name="keySize">
+                <option value="2048">2048 bits</option>
+                <option value="3072">3072 bits</option>
+                <option value="4096">4096 bits</option>
+            </select>
         </div>
-    </div>
+        <button type="submit" class="btn btn-primary">Generate Key Pair</button>
+    </form>
 </div>
 
 <!-- Bootstrap JS -->

@@ -19,12 +19,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/certificate/generate-certificate">Generate Certificate</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/certificate/view-certificate">View Certificate</a>
-                </li>
             </ul>
         </div>
     </div>
@@ -32,17 +26,37 @@
 
 <!-- Main Content -->
 <div class="container mt-5">
-    <h1>Certificate Management</h1>
+    <h1>Certificates</h1>
 
-    <!-- Affichage des messages de succès ou d'erreur -->
-    <div th:if="${message}" class="alert alert-success mt-3" th:text="${message}"></div>
-    <div th:if="${error}" class="alert alert-danger mt-3" th:text="${error}"></div>
+    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-    <!-- Boutons d'action -->
-    <div class="mt-4">
-        <a href="/certificate/generate-certificate" class="btn btn-primary">Generate New Certificate</a>
-        <a href="/certificate/view-certificate" class="btn btn-secondary">View Certificates</a>
-    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Common Name</th>
+            <th>Serial Number</th>
+            <th>Issuer</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cert : ${certificates}">
+            <td th:text="${#strings.substringAfter(cert.subject, 'CN=')}">Common Name</td>
+            <td th:text="${cert.serialNumber}">Serial</td>
+            <td th:text="${cert.issuer}">Issuer</td>
+            <td>
+                <a th:href="@{'/certificate/ldap/' + ${#strings.replace(#strings.substringAfter(cert.subject, 'CN='), ' ', '')}}"
+                   class="btn btn-info">View</a>
+            </td>
+            <td>
+                <a th:href="@{'/certificate/delete/' + ${#strings.substringAfter(cert.subject, 'CN=')}}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/certificate/generate-certificate" class="btn btn-primary">Generate New Certificate</a>
 </div>
 
 <!-- Footer -->
